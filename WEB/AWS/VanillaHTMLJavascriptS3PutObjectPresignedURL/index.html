@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<input type="text" id="url" placeholder="Input Lamda URL">
+	<br><br>
+	<input type="file" id="fileInput" onchange="handleFileChange(this)">
+	<a href="" id="myDownloadLink" download="file.jpg" target="_blank">Download</a>
+	<br><br>
+	<input type="button" onclick="executeOpenFile(this)" value="Download With window.open">
+	<input type="button" onclick="executeOpenWithTag(this)" value="Download by adding an A href tag">
+
+	<p>Upload percentage: <span id="uploadPercent"></span> </p>
+	<br><br>
+	<img src="" id="imgPreview" height="400" width="600" />
+	
+	<!-- SCRIPTS SECTION START HERE -->
+	<!--
+		You can import other javascript libraries like AWS-SDK and AXIOS as shown below and then use the funcitons directly into other
+		script sections or into other javascript modules like handler.js below.
+		Make sure to update the AWS-SDK version to the latest one, you can find it on the AWS webpage looking for AWS-SDK for browser
+		or vanilla javascript.
+	-->
+	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1161.0.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<!-- 
+		If the handler.js below contains "import namedVar from 'other.js', I mean, if it imports other js into itself, then
+		you have to set the handler.js as type='module' as shown below.
+	-->
+	<script type="module" src="handler.js"></script>
+	<script>
+		/*
+		variables declared as global within a script tag, become global for the session and its value can be referended
+		from any sub function, even if that funciton is into the handler.js (imported above), the function inside the handler.js
+		can set the value of the global variable below.
+		*/
+		var downloadFileURL=''
+
+		function executeOpenFile(e) {
+			if(downloadFileURL!= '')
+			{
+				console.log("executeOpenFile")
+				window.open(downloadFileURL, "_blank")
+				console.log("executeOpenFile After")
+			}
+		}
+
+		function executeOpenWithTag(e){
+			if(downloadFileURL!= '')
+			{
+				const link = document.createElement('a')
+				link.href = downloadFileURL
+				document.body.appendChild(link)
+				link.click()
+				link.remove()
+			}
+		}
+	</script>
+	<!-- When you use the addEventListener handler an input type file, it does not work well with the event that is passed
+	 it is usually e.files[0] to access the file and its properties, but with addEventListener the 
+	event object that is passed as parameter is very different, reason why I commented this line below
+	and used the onchange handler in the input tag itself for the id fileInput above-->
+	<!-- <script>
+		document.getElementById("fileInput").addEventListener('change', handleFileChange);
+	</script> -->
+	
+</body>
+</html>
