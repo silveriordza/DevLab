@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JS Watermark</title>
+  </head>
+  <body>
+    <!-- (A) HTML CANVAS -->
+    <canvas id="demo"></canvas>
+
+    <script>
+    // (B) IMAGES + CANVAS
+    var iBack = new Image(),
+        iMark = new Image(),
+        iLoaded = 0,
+        canvas = document.getElementById("demo"),
+        ctx = canvas.getContext("2d");
+
+    // (C) WATERMARK
+    function cmark () { iLoaded++; if (iLoaded==2) {
+      // (C1) ADD BACKGROUND IMAGE
+      canvas.width = iBack.naturalWidth;
+      canvas.height = iBack.naturalHeight;
+      ctx.drawImage(iBack, 0, 0, iBack.naturalWidth, iBack.naturalHeight);
+
+      // (C2) ADD WATERMARK
+      ctx.drawImage(iMark, 0, 0, iMark.naturalWidth, iMark.naturalHeight);
+
+      /* (C3) DOWNLOAD (IF YOU WANT)
+      let anchor = document.createElement("a");
+      anchor.href = canvas.toDataURL("image/png");
+      anchor.download = "marked.png";
+      anchor.click();
+      anchor.remove();*/
+    }}
+
+    // (D) GO - PROCEED ONLY WHEN IMAGES ARE LOADED
+    iBack.onload = cmark;
+    iMark.onload = cmark;
+    iBack.src = "eggs.jpg";
+    iMark.src = "potato.png";
+    </script>
+  </body>
+</html>
